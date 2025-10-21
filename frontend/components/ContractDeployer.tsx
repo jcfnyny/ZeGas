@@ -64,17 +64,18 @@ export default function ContractDeployer({ onDeploySuccess }: Props) {
         throw new Error(data.error || "Deployment failed");
       }
 
-      let successMessage = `✅ Contract deployed to ${data.address.substring(0, 10)}...`;
+      let successMessage = `Contract deployed to ${data.address.substring(0, 10)}...`;
+      let verificationMessage = "";
       
       if (data.verificationStatus === "verified") {
-        successMessage += "\n✅ Contract verified on Etherscan!";
+        verificationMessage = "Contract verified on Etherscan!";
       } else if (data.verificationStatus === "already_verified") {
-        successMessage += "\n✅ Contract was already verified!";
+        verificationMessage = "Contract was already verified!";
       } else if (data.verificationStatus === "failed") {
-        successMessage += "\n⚠️ Contract deployed but verification failed";
+        verificationMessage = "Contract deployed but verification failed";
       }
       
-      setDeploymentStatus(successMessage);
+      setDeploymentStatus(verificationMessage ? `${successMessage}\n${verificationMessage}` : successMessage);
       setTimeout(() => {
         onDeploySuccess(data.address);
         setIsOpen(false);
@@ -92,9 +93,12 @@ export default function ContractDeployer({ onDeploySuccess }: Props) {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="w-full bg-gradient-to-r from-kraken-purple to-kraken-accent hover:from-kraken-accent hover:to-kraken-purple text-white font-semibold py-4 px-6 rounded-lg transition-all shadow-lg shadow-kraken-purple/30"
+        className="w-full bg-gradient-to-r from-kraken-purple to-kraken-accent hover:from-kraken-accent hover:to-kraken-purple text-white font-semibold py-4 px-6 rounded-lg transition-all shadow-lg shadow-kraken-purple/30 flex items-center justify-center gap-2"
       >
-        🚀 Deploy Contract
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+        </svg>
+        Deploy Contract
       </button>
     );
   }
@@ -151,7 +155,12 @@ export default function ContractDeployer({ onDeploySuccess }: Props) {
             <div className="bg-kraken-darker/50 border border-kraken-purple/20 rounded-lg p-3">
               <p className="text-xs text-gray-400 mb-1">RPC Endpoint</p>
               <p className="text-sm text-gray-300 font-mono break-all">{rpcUrl}</p>
-              <p className="text-xs text-yellow-400 mt-2">💡 Using demo RPC. For production, use your own Alchemy/Infura key.</p>
+              <p className="text-xs text-yellow-400 mt-2 flex items-center gap-1">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z" />
+              </svg>
+              Using demo RPC. For production, use your own Alchemy/Infura key.
+            </p>
             </div>
           )}
 
@@ -168,7 +177,12 @@ export default function ContractDeployer({ onDeploySuccess }: Props) {
               placeholder="0x... (64 hex characters)"
               className="w-full border border-kraken-purple/30 bg-kraken-darker text-white p-3 rounded-lg font-mono text-sm focus:outline-none focus:border-kraken-purple transition-colors"
             />
-            <p className="text-xs text-gray-400 mt-1">⚠️ Never share your private key. It's used only for deployment and not stored.</p>
+            <p className="text-xs text-gray-400 mt-1 flex items-center gap-1">
+              <svg className="w-4 h-4 text-red-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+              Never share your private key. It's used only for deployment and not stored.
+            </p>
           </div>
 
           {/* Gas Price Limit */}
@@ -216,15 +230,21 @@ export default function ContractDeployer({ onDeploySuccess }: Props) {
 
           {/* Error Message */}
           {error && (
-            <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
-              <p className="text-red-400 text-sm">❌ {error}</p>
+            <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 flex items-start gap-3">
+              <svg className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+              <p className="text-red-400 text-sm whitespace-pre-line">{error}</p>
             </div>
           )}
 
           {/* Deployment Status */}
           {deploymentStatus && (
-            <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
-              <p className="text-green-400 text-sm">{deploymentStatus}</p>
+            <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 flex items-start gap-3">
+              <svg className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <p className="text-green-400 text-sm whitespace-pre-line">{deploymentStatus}</p>
             </div>
           )}
 
