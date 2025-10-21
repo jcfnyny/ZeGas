@@ -4,13 +4,15 @@ type NetworkConfig = {
   name: string;
   address: string;
   chainId: number;
+  isPlaceholder?: boolean;
 };
 
 const KNOWN_CONTRACTS: NetworkConfig[] = [
   {
-    name: "Sepolia Testnet (Official)",
-    address: "0x0000000000000000000000000000000000000000",
+    name: "Not yet deployed - Deploy your own contract first",
+    address: "",
     chainId: 11155111,
+    isPlaceholder: true,
   },
 ];
 
@@ -21,7 +23,7 @@ type Props = {
 };
 
 export default function ContractSelector({ onAddressSelected }: Props) {
-  const [selectedOption, setSelectedOption] = useState<"preset" | "custom">("preset");
+  const [selectedOption, setSelectedOption] = useState<"preset" | "custom">("custom");
   const [presetIndex, setPresetIndex] = useState(0);
   const [customAddress, setCustomAddress] = useState("");
   const [isConfigured, setIsConfigured] = useState(false);
@@ -53,12 +55,12 @@ export default function ContractSelector({ onAddressSelected }: Props) {
       ? KNOWN_CONTRACTS[presetIndex].address 
       : customAddress;
 
-    if (!address || address === "0x0000000000000000000000000000000000000000") {
-      alert("Please enter a valid contract address or deploy your own ZegasScheduler contract.");
+    if (!address || address.trim() === "") {
+      alert("Please enter a valid contract address. You must deploy the ZegasScheduler contract first.");
       return;
     }
 
-    if (selectedOption === "custom" && !/^0x[a-fA-F0-9]{40}$/.test(address)) {
+    if (!/^0x[a-fA-F0-9]{40}$/.test(address)) {
       alert("Invalid Ethereum address format. Must be 42 characters starting with 0x.");
       return;
     }
@@ -98,8 +100,11 @@ export default function ContractSelector({ onAddressSelected }: Props) {
   }
 
   return (
-    <div className="w-full max-w-md space-y-4 p-6 bg-gray-50 rounded-lg">
-      <h2 className="text-xl font-semibold mb-4">Select ZegasScheduler Contract</h2>
+    <div className="w-full max-w-md space-y-4 p-6 bg-white rounded-lg shadow-md">
+      <h2 className="text-xl font-semibold mb-2">Connect to ZegasScheduler</h2>
+      <p className="text-sm text-gray-600 mb-4">
+        Enter your deployed contract address to start scheduling transactions.
+      </p>
       
       <div className="space-y-3">
         <label className="flex items-center space-x-2 cursor-pointer">
@@ -110,21 +115,29 @@ export default function ContractSelector({ onAddressSelected }: Props) {
             onChange={() => setSelectedOption("preset")}
             className="w-4 h-4"
           />
-          <span>Use pre-configured contract</span>
+          <span className="text-sm">Use official contract</span>
         </label>
 
         {selectedOption === "preset" && (
-          <select
-            value={presetIndex}
-            onChange={(e) => setPresetIndex(Number(e.target.value))}
-            className="w-full border p-2 rounded ml-6"
-          >
-            {KNOWN_CONTRACTS.map((contract, idx) => (
-              <option key={idx} value={idx}>
-                {contract.name}
-              </option>
-            ))}
-          </select>
+          <div className="ml-6 space-y-2">
+            <select
+              value={presetIndex}
+              onChange={(e) => setPresetIndex(Number(e.target.value))}
+              className="w-full border p-2 rounded text-sm"
+              disabled={KNOWN_CONTRACTS[presetIndex].isPlaceholder}
+            >
+              {KNOWN_CONTRACTS.map((contract, idx) => (
+                <option key={idx} value={idx}>
+                  {contract.name}
+                </option>
+              ))}
+            </select>
+            {KNOWN_CONTRACTS[presetIndex].isPlaceholder && (
+              <p className="text-xs text-amber-600 bg-amber-50 p-2 rounded">
+                ⚠️ No official contracts available yet. Use the custom option below.
+              </p>
+            )}
+          </div>
         )}
 
         <label className="flex items-center space-x-2 cursor-pointer">
@@ -135,7 +148,7 @@ export default function ContractSelector({ onAddressSelected }: Props) {
             onChange={() => setSelectedOption("custom")}
             className="w-4 h-4"
           />
-          <span>Enter custom contract address</span>
+          <span className="text-sm">Enter your contract address</span>
         </label>
 
         {selectedOption === "custom" && (
@@ -152,15 +165,18 @@ export default function ContractSelector({ onAddressSelected }: Props) {
       <div className="pt-4">
         <button
           onClick={handleConnect}
-          className="w-full bg-blue-600 text-white p-3 rounded hover:bg-blue-700 font-semibold"
+          className="w-full bg-blue-600 text-white p-3 rounded hover:bg-blue-700 font-semibold transition-colors"
         >
           Connect to Contract
         </button>
       </div>
 
-      <p className="text-xs text-gray-500 text-center">
-        Don't have a contract? Deploy ZegasScheduler to your preferred network first.
-      </p>
+      <div className="bg-blue-50 p-4 rounded text-sm space-y-2">
+        <p className="font-semibold text-blue-900">📝 Need to deploy a contract?</p>
+        <p className="text-blue-800">
+          Run <code className="bg-blue-100 px-1 rounded">npm run deploy</code> in the terminal to deploy ZegasScheduler to Sepolia testnet.
+        </p>
+      </div>
     </div>
   );
 }
