@@ -26,12 +26,57 @@ export default function SchedulerForm({ schedulerAddress }: Props) {
   };
 
   return (
-    <div className="w-full max-w-md space-y-2">
-      <input className="w-full border p-2 rounded" placeholder="Target address" value={target} onChange={e=>setTarget(e.target.value)} />
-      <input className="w-full border p-2 rounded" placeholder="Max Gas (gwei)" value={gas} onChange={e=>setGas(e.target.value)} />
-      <input className="w-full border p-2 rounded" placeholder="ETH to send (optional)" value={amountEth} onChange={e=>setAmountEth(e.target.value)} />
-      <input className="w-full border p-2 rounded" placeholder="Deadline block (optional)" value={deadline} onChange={e=>setDeadline(e.target.value)} />
-      <button onClick={createJob} className="w-full bg-blue-600 text-white p-2 rounded">Create Job</button>
+    <div className="w-full max-w-md space-y-4 p-6 bg-kraken-dark/50 backdrop-blur-xl rounded-xl shadow-2xl border border-kraken-purple/20">
+      <h2 className="text-2xl font-bold text-white mb-4">Schedule Transaction</h2>
+      
+      <div className="space-y-4">
+        <div>
+          <label className="block text-sm font-semibold text-gray-300 mb-2">Target Address</label>
+          <input 
+            className="w-full border border-kraken-purple/30 bg-kraken-darker text-white p-3 rounded-lg font-mono text-sm focus:outline-none focus:border-kraken-purple transition-colors" 
+            placeholder="0x..." 
+            value={target} 
+            onChange={e=>setTarget(e.target.value)} 
+          />
+        </div>
+        
+        <div>
+          <label className="block text-sm font-semibold text-gray-300 mb-2">Max Gas (gwei)</label>
+          <input 
+            className="w-full border border-kraken-purple/30 bg-kraken-darker text-white p-3 rounded-lg text-sm focus:outline-none focus:border-kraken-purple transition-colors" 
+            placeholder="e.g. 50" 
+            value={gas} 
+            onChange={e=>setGas(e.target.value)} 
+          />
+        </div>
+        
+        <div>
+          <label className="block text-sm font-semibold text-gray-300 mb-2">ETH to Send (optional)</label>
+          <input 
+            className="w-full border border-kraken-purple/30 bg-kraken-darker text-white p-3 rounded-lg text-sm focus:outline-none focus:border-kraken-purple transition-colors" 
+            placeholder="0.0" 
+            value={amountEth} 
+            onChange={e=>setAmountEth(e.target.value)} 
+          />
+        </div>
+        
+        <div>
+          <label className="block text-sm font-semibold text-gray-300 mb-2">Deadline Block (optional)</label>
+          <input 
+            className="w-full border border-kraken-purple/30 bg-kraken-darker text-white p-3 rounded-lg text-sm focus:outline-none focus:border-kraken-purple transition-colors" 
+            placeholder="999999999" 
+            value={deadline} 
+            onChange={e=>setDeadline(e.target.value)} 
+          />
+        </div>
+      </div>
+      
+      <button 
+        onClick={createJob} 
+        className="w-full bg-gradient-to-r from-kraken-purple to-kraken-accent hover:from-kraken-accent hover:to-kraken-purple text-white font-semibold p-4 rounded-lg transition-all shadow-lg shadow-kraken-purple/30"
+      >
+        Create Job
+      </button>
     </div>
   );
 }
