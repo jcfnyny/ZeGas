@@ -42,6 +42,7 @@ Zegas is a blockchain-based task scheduler application built with Next.js and Et
   - Dark form inputs with purple borders and focus states
   - Consistent hover and transition animations
 - Maintained visual hierarchy and accessibility across all user flows
+- Removed oversized decorative icons for a cleaner, more professional UI
 
 ### Contract Deployment UI (October 21, 2025)
 - Added browser-based contract deployment with `ContractDeployer` component
