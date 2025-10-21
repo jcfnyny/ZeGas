@@ -1,22 +1,23 @@
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const SchedulerForm = dynamic(() => import("../components/SchedulerForm"), { ssr: false });
+const ContractSelector = dynamic(() => import("../components/ContractSelector"), { ssr: false });
 
 export default function Home() {
   const [addr, setAddr] = useState<string>("");
 
-  useEffect(()=>{
-    setAddr(process.env.NEXT_PUBLIC_SCHEDULER || "");
-  },[]);
-
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-8">
-      <h1 className="text-3xl font-bold mb-6">⛽ ZeGas Scheduler</h1>
+    <main className="min-h-screen flex flex-col items-center justify-center p-8 bg-gradient-to-br from-blue-50 to-indigo-100">
+      <h1 className="text-4xl font-bold mb-2">⛽ ZeGas Scheduler</h1>
+      <p className="text-gray-600 mb-8">Schedule Ethereum transactions for later execution</p>
+      
       {!addr ? (
-        <p className="text-gray-600">Set <code>NEXT_PUBLIC_SCHEDULER</code> in <code>.env.local</code> to your deployed contract address.</p>
+        <ContractSelector onAddressSelected={setAddr} />
       ) : (
-        <SchedulerForm schedulerAddress={addr} />
+        <div className="w-full max-w-md space-y-4">
+          <SchedulerForm schedulerAddress={addr} />
+        </div>
       )}
     </main>
   );
