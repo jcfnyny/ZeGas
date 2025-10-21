@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import ContractDeployer from "./ContractDeployer";
 
 type NetworkConfig = {
   name: string;
@@ -171,11 +172,20 @@ export default function ContractSelector({ onAddressSelected }: Props) {
         </button>
       </div>
 
-      <div className="bg-kraken-purple/10 border border-kraken-purple/30 p-4 rounded text-sm space-y-2">
-        <p className="font-semibold text-kraken-light">📝 Need to deploy a contract?</p>
-        <p className="text-gray-300">
-          Run <code className="bg-kraken-darker px-2 py-1 rounded text-kraken-accent">npm run deploy</code> in the terminal to deploy ZegasScheduler to Sepolia testnet.
+      <div className="bg-kraken-purple/10 border border-kraken-purple/30 p-4 rounded space-y-3">
+        <p className="font-semibold text-white text-sm">📝 Don't have a contract yet?</p>
+        <p className="text-gray-300 text-xs">
+          Deploy your own ZegasTokenTransfer contract with custom parameters directly from your browser.
         </p>
+        <ContractDeployer 
+          onDeploySuccess={(address) => {
+            setCustomAddress(address);
+            setSelectedOption("custom");
+            localStorage.setItem(STORAGE_KEY, address);
+            onAddressSelected(address);
+            setIsConfigured(true);
+          }} 
+        />
       </div>
     </div>
   );
