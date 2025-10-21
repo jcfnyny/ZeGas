@@ -25,6 +25,10 @@ export default function ContractDeployer({ onDeploySuccess }: Props) {
   const [deploying, setDeploying] = useState(false);
   const [error, setError] = useState("");
   const [deploymentStatus, setDeploymentStatus] = useState("");
+  
+  const [platformFeeBps, setPlatformFeeBps] = useState("10");
+  const [feeCollector, setFeeCollector] = useState("");
+  const [relayerAddresses, setRelayerAddresses] = useState("");
 
   const selectedNetwork = NETWORKS.find((n) => n.id === network) || NETWORKS[0];
   const rpcUrl = network === "custom" ? customRpcUrl : selectedNetwork.rpcUrl;
@@ -59,6 +63,9 @@ export default function ContractDeployer({ onDeploySuccess }: Props) {
           chainId: selectedNetwork.chainId,
           verifyContract,
           etherscanApiKey: verifyContract ? etherscanApiKey : undefined,
+          platformFeeBps: platformFeeBps ? parseInt(platformFeeBps) : 10,
+          feeCollector: feeCollector || undefined,
+          relayerAddresses: relayerAddresses ? relayerAddresses.split(',').map(addr => addr.trim()).filter(addr => addr) : [],
         }),
       });
 
@@ -133,10 +140,67 @@ export default function ContractDeployer({ onDeploySuccess }: Props) {
               Contract Information
             </h3>
             <div className="text-xs text-gray-300 space-y-1">
-              <p><span className="text-gray-400">Name:</span> ZegasTokenTransfer</p>
-              <p><span className="text-gray-400">Version:</span> 1.0.0</p>
-              <p><span className="text-gray-400">Features:</span> ERC20 & Native token transfers, Time-locked execution, Cancellable transfers</p>
-              <p><span className="text-gray-400">Estimated Gas:</span> ~1.2M gas (~0.024 ETH at 20 Gwei)</p>
+              <p><span className="text-gray-400">Name:</span> ZegasSmartTransfer</p>
+              <p><span className="text-gray-400">Version:</span> 2.0.0</p>
+              <p><span className="text-gray-400">Features:</span> Gas-aware scheduling, Time windows, EIP-2612 permit, Relayer system</p>
+              <p><span className="text-gray-400">Estimated Gas:</span> ~1.5M gas (~0.03 ETH at 20 Gwei)</p>
+            </div>
+          </div>
+
+          {/* Contract Configuration */}
+          <div className="bg-kraken-darker/50 border border-kraken-purple/20 rounded-lg p-4 space-y-4">
+            <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+              <svg className="w-4 h-4 text-kraken-accent" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+              </svg>
+              Contract Configuration
+            </h3>
+            
+            <div>
+              <label className="block text-xs font-semibold text-gray-300 mb-2">
+                Platform Fee (basis points)
+                <span className="text-gray-500 ml-2 font-normal">1 bp = 0.01%, max 1000 bp (10%)</span>
+              </label>
+              <input
+                type="number"
+                value={platformFeeBps}
+                onChange={(e) => setPlatformFeeBps(e.target.value)}
+                placeholder="10"
+                min="0"
+                max="1000"
+                className="w-full border border-kraken-purple/30 bg-kraken-darker text-white p-2 rounded text-sm focus:outline-none focus:border-kraken-purple transition-colors"
+              />
+              <p className="text-xs text-gray-400 mt-1">Default: 10 bp (0.1%) - Fee charged on each transfer</p>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-gray-300 mb-2">
+                Fee Collector Address
+                <span className="text-gray-500 ml-2 font-normal">(optional - defaults to your address)</span>
+              </label>
+              <input
+                type="text"
+                value={feeCollector}
+                onChange={(e) => setFeeCollector(e.target.value)}
+                placeholder="0x... (leave empty to use your address)"
+                className="w-full border border-kraken-purple/30 bg-kraken-darker text-white p-2 rounded text-sm font-mono focus:outline-none focus:border-kraken-purple transition-colors"
+              />
+              <p className="text-xs text-gray-400 mt-1">Address that receives platform fees</p>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-gray-300 mb-2">
+                Initial Relayer Addresses
+                <span className="text-gray-500 ml-2 font-normal">(optional - comma separated)</span>
+              </label>
+              <textarea
+                value={relayerAddresses}
+                onChange={(e) => setRelayerAddresses(e.target.value)}
+                placeholder="0x123..., 0x456... (leave empty to only authorize your address)"
+                rows={2}
+                className="w-full border border-kraken-purple/30 bg-kraken-darker text-white p-2 rounded text-sm font-mono focus:outline-none focus:border-kraken-purple transition-colors"
+              />
+              <p className="text-xs text-gray-400 mt-1">Authorized addresses that can execute gas-aware transfers</p>
             </div>
           </div>
 

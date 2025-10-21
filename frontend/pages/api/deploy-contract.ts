@@ -35,6 +35,9 @@ interface DeployRequest {
   chainId: number;
   verifyContract?: boolean;
   etherscanApiKey?: string;
+  platformFeeBps?: number;
+  feeCollector?: string;
+  relayerAddresses?: string[];
 }
 
 export default async function handler(
@@ -46,7 +49,19 @@ export default async function handler(
   }
 
   try {
-    const { rpcUrl, privateKey, minGasPrice, maxGasPrice, gasTimeout, chainId, verifyContract, etherscanApiKey }: DeployRequest = req.body;
+    const { 
+      rpcUrl, 
+      privateKey, 
+      minGasPrice, 
+      maxGasPrice, 
+      gasTimeout, 
+      chainId, 
+      verifyContract, 
+      etherscanApiKey,
+      platformFeeBps = 10,
+      feeCollector,
+      relayerAddresses = []
+    }: DeployRequest = req.body;
 
     if (!rpcUrl || !privateKey) {
       return res.status(400).json({ error: "Missing required fields" });
@@ -103,7 +118,7 @@ export default async function handler(
     let contractArtifact;
     try {
       // Try to read from Hardhat artifacts
-      const artifactPath = path.join(process.cwd(), '../artifacts/contracts/ZegasTokenTransfer.sol/ZegasTokenTransfer.json');
+      const artifactPath = path.join(process.cwd(), '../artifacts/contracts/ZegasSmartTransfer.sol/ZegasSmartTransfer.json');
       contractArtifact = JSON.parse(fs.readFileSync(artifactPath, 'utf8'));
     } catch (error) {
       return res.status(500).json({ 
@@ -111,17 +126,35 @@ export default async function handler(
       });
     }
 
-    // Deploy the contract
+    // Determine fee collector (use deployer address if not specified)
+    const finalFeeCollector = feeCollector || wallet.address;
+
+    // Deploy the contract with constructor parameters
     const factory = new ethers.ContractFactory(
       contractArtifact.abi,
       contractArtifact.bytecode,
       wallet
     );
 
-    const contract = await factory.deploy();
+    const contract = await factory.deploy(platformFeeBps, finalFeeCollector);
     await contract.waitForDeployment();
     const address = await contract.getAddress();
     const txHash = contract.deploymentTransaction()?.hash;
+
+    // Authorize relayers
+    const relayersToAuthorize = [...relayerAddresses];
+    if (!relayersToAuthorize.includes(wallet.address)) {
+      relayersToAuthorize.push(wallet.address);
+    }
+
+    for (const relayerAddress of relayersToAuthorize) {
+      try {
+        const tx = await contract.setRelayerAuthorization(relayerAddress, true);
+        await tx.wait();
+      } catch (error) {
+        console.error(`Failed to authorize relayer ${relayerAddress}:`, error);
+      }
+    }
 
     // Verify contract on Etherscan if requested
     let verificationStatus = "not_requested";

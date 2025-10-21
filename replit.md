@@ -73,6 +73,10 @@ ZeGas Smart Transfer is a gas-price-aware token transfer scheduler built with Ne
 - Replaced CLI instruction with interactive "Deploy Contract" button
 - Comprehensive deployment parameters with helper text:
   - **Contract Information Panel**: Shows contract name, version, features, and estimated gas cost
+  - **Contract Configuration**:
+    - Platform fee in basis points (0-1000, default 10 = 0.1%)
+    - Fee collector address (optional, defaults to deployer)
+    - Initial relayer addresses (comma-separated, optional)
   - **Network Selection**: Ethereum, Sepolia, Polygon, Arbitrum, or Custom RPC with chainId
   - **Gas Price Control**:
     - Minimum acceptable gas price (Gwei)
@@ -84,6 +88,8 @@ ZeGas Smart Transfer is a gas-price-aware token transfer scheduler built with Ne
   - Validates wallet balance before deployment
   - Implements gas price waiting loop with configurable timeout
   - Validates gas price within min/max thresholds
+  - Deploys ZegasSmartTransfer with custom constructor parameters
+  - Authorizes specified relayers after deployment
   - Handles Etherscan verification with network-specific API URLs
 - Automatic contract address population and localStorage persistence after deployment
 - Professional SVG icons throughout (no emojis):

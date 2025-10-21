@@ -75,9 +75,16 @@ contract ZegasSmartTransfer is ReentrancyGuard, Ownable {
     event RelayerAuthorized(address indexed relayer, bool status);
     event FeeUpdated(uint256 newFeeBps, address newCollector);
 
-    constructor() Ownable(msg.sender) {
-        platformFeeBps = 10; // 0.1% default fee
-        feeCollector = msg.sender;
+    /**
+     * @param initialFeeBps Initial platform fee in basis points (max 1000 = 10%)
+     * @param initialFeeCollector Address to receive platform fees
+     */
+    constructor(uint256 initialFeeBps, address initialFeeCollector) Ownable(msg.sender) {
+        require(initialFeeBps <= 1000, "Fee too high (max 10%)");
+        require(initialFeeCollector != address(0), "Invalid fee collector");
+        
+        platformFeeBps = initialFeeBps;
+        feeCollector = initialFeeCollector;
     }
 
     /**
