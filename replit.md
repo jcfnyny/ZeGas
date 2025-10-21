@@ -31,6 +31,18 @@ Zegas is a blockchain-based task scheduler application built with Next.js and Et
 - New `ZegasTokenTransfer` contract for scheduled ERC20 and native token transfers
 - Transaction status indicators with step-by-step feedback
 
+### Kraken Theme Implementation (October 21, 2025)
+- Applied Kraken's signature purple color palette (#7434f3 primary, #b494e6 supporting, #bc91f7 accent)
+- Dark theme with professional backgrounds (#1a0b2e dark, #0d0618 darker)
+- Imported Inter font via Google Fonts for modern, clean typography
+- Created eye-catching HeaderBanner with gradient, animations, and trust indicators
+- Updated all components with consistent dark purple aesthetic:
+  - Glassmorphism effects with backdrop blur
+  - Purple gradient buttons with shadow effects
+  - Dark form inputs with purple borders and focus states
+  - Consistent hover and transition animations
+- Maintained visual hierarchy and accessibility across all user flows
+
 ## Project Architecture
 
 ### Structure
