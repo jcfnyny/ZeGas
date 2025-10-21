@@ -14,6 +14,13 @@ Zegas is a blockchain-based task scheduler application built with Next.js and Et
 - Updated Next.js from 14.2.5 to 14.2.33 to address critical security vulnerabilities
 - Installed all dependencies for both root and frontend directories
 
+### User Experience Improvements
+- Added `ContractSelector` component to allow users to enter their deployed contract address
+- Implemented localStorage persistence to remember user's selected contract
+- Added clear guidance for users to deploy contracts using `npm run deploy`
+- Fixed TypeScript configuration (ES2020 target) and added window.ethereum type definitions
+- Improved UI with better messaging and validation for contract addresses
+
 ## Project Architecture
 
 ### Structure
@@ -24,7 +31,10 @@ This is a monorepo containing:
   
 - **/frontend**: Next.js application (pages directory)
   - `pages/`: Page routes
-  - `components/`: React components including SchedulerForm
+  - `components/`: React components
+    - `SchedulerForm.tsx`: Main form for creating scheduled transactions
+    - `ContractSelector.tsx`: UI for selecting/entering contract address with localStorage persistence
+  - `types/`: TypeScript type definitions
   - `styles/`: Global CSS and Tailwind configuration
   
 - **/scripts**: Deployment and utility scripts
@@ -51,8 +61,10 @@ Required for contract deployment and relayer bot:
 - `SCHEDULER_ADDRESS`: Deployed ZegasScheduler contract address
 
 ### Frontend (frontend/.env.local)
-Required for frontend to interact with contracts:
+Optional - users can also enter the contract address directly in the UI:
 - `NEXT_PUBLIC_SCHEDULER`: ZegasScheduler contract address (same as SCHEDULER_ADDRESS)
+
+**Note**: The frontend now includes a user-friendly contract selector that allows users to enter their contract address directly in the browser. The address is saved in localStorage, so users only need to enter it once.
 
 ## Development
 
