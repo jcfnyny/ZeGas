@@ -6,7 +6,6 @@ const WalletConnect = dynamic(() => import("../components/WalletConnect"), { ssr
 const NetworkSelector = dynamic(() => import("../components/NetworkSelector"), { ssr: false });
 const ContractSelector = dynamic(() => import("../components/ContractSelector"), { ssr: false });
 const TransferForm = dynamic(() => import("../components/TransferForm"), { ssr: false });
-const HeaderBanner = dynamic(() => import("../components/HeaderBanner"), { ssr: false });
 
 import type { Network } from "../components/NetworkSelector";
 
@@ -34,17 +33,17 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-kraken-darker">
-      <nav className="bg-kraken-dark/80 border-b border-kraken-purple/20 sticky top-0 z-40 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-6 py-4">
+    <main className="min-h-screen bg-gradient-to-b from-kraken-darker via-kraken-dark to-kraken-darker">
+      <nav className="bg-kraken-dark/90 border-b border-kraken-purple/30 backdrop-blur-sm">
+        <div className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-kraken-purple to-kraken-accent rounded-lg flex items-center justify-center shadow-lg shadow-kraken-purple/30">
+              <div className="w-10 h-10 bg-gradient-to-br from-kraken-purple to-kraken-accent rounded-lg flex items-center justify-center">
                 <span className="text-white text-xl font-bold">Z</span>
               </div>
               <div>
-                <h1 className="text-xl font-bold text-white">ZeGas Transfer</h1>
-                <p className="text-xs text-gray-400">Schedule token transfers on-chain</p>
+                <h1 className="text-xl font-bold text-white">ZeGas</h1>
+                <p className="text-xs text-gray-400">Token Transfer Scheduler</p>
               </div>
             </div>
             
@@ -64,18 +63,17 @@ export default function Home() {
         </div>
       </nav>
 
-      {!userAddress && <HeaderBanner />}
-
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="max-w-6xl mx-auto px-6 py-16">
         {!userAddress ? (
-          <div className="max-w-2xl mx-auto text-center space-y-8">
-            <div className="bg-kraken-dark/50 backdrop-blur-xl rounded-2xl shadow-2xl p-12 border border-kraken-purple/20">
-              <div className="mb-8">
-                <h3 className="text-2xl font-bold text-white mb-3">Connect Your Wallet</h3>
-                <p className="text-gray-300">
-                  Connect your Web3 wallet to start scheduling transfers
-                </p>
-              </div>
+          <div className="max-w-xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold text-white mb-4">Schedule Token Transfers</h2>
+              <p className="text-lg text-gray-300">Lock tokens now, transfer them later with blockchain-based scheduling</p>
+            </div>
+
+            <div className="bg-kraken-dark/60 backdrop-blur-md rounded-xl p-8 border border-kraken-purple/30">
+              <h3 className="text-xl font-semibold text-white mb-2 text-center">Get Started</h3>
+              <p className="text-gray-300 text-center mb-6">Connect your wallet to schedule transfers</p>
               
               <div className="flex justify-center">
                 <WalletConnect 
@@ -85,35 +83,35 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-6 text-left">
-              <div className="bg-kraken-dark/30 backdrop-blur-sm rounded-xl p-6 border border-kraken-purple/20 hover:border-kraken-purple/50 transition-all">
-                <div className="w-12 h-12 bg-kraken-purple/20 rounded-lg flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-kraken-accent" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+            <div className="grid grid-cols-3 gap-4 mt-12">
+              <div className="text-center">
+                <div className="bg-kraken-purple/10 rounded-lg p-4 mb-3">
+                  <svg className="w-8 h-8 text-kraken-accent mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                   </svg>
                 </div>
-                <h3 className="font-bold text-white mb-2">Secure</h3>
-                <p className="text-sm text-gray-400">Your tokens are locked in a verified smart contract</p>
+                <h4 className="text-white font-semibold text-sm mb-1">Secure</h4>
+                <p className="text-gray-400 text-xs">Smart contract protected</p>
               </div>
-              
-              <div className="bg-kraken-dark/30 backdrop-blur-sm rounded-xl p-6 border border-kraken-purple/20 hover:border-kraken-purple/50 transition-all">
-                <div className="w-12 h-12 bg-kraken-purple/20 rounded-lg flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-kraken-accent" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+
+              <div className="text-center">
+                <div className="bg-kraken-purple/10 rounded-lg p-4 mb-3">
+                  <svg className="w-8 h-8 text-kraken-accent mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <h3 className="font-bold text-white mb-2">Flexible</h3>
-                <p className="text-sm text-gray-400">Schedule transfers for any future time</p>
+                <h4 className="text-white font-semibold text-sm mb-1">Scheduled</h4>
+                <p className="text-gray-400 text-xs">Time-locked transfers</p>
               </div>
-              
-              <div className="bg-kraken-dark/30 backdrop-blur-sm rounded-xl p-6 border border-kraken-purple/20 hover:border-kraken-purple/50 transition-all">
-                <div className="w-12 h-12 bg-kraken-purple/20 rounded-lg flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-kraken-accent" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M4.083 9h1.946c.089-1.546.383-2.97.837-4.118A6.004 6.004 0 004.083 9zM10 2a8 8 0 100 16 8 8 0 000-16zm0 2c-.076 0-.232.032-.465.262-.238.234-.497.623-.737 1.182-.389.907-.673 2.142-.766 3.556h3.936c-.093-1.414-.377-2.649-.766-3.556-.24-.56-.5-.948-.737-1.182C10.232 4.032 10.076 4 10 4zm3.971 5c-.089-1.546-.383-2.97-.837-4.118A6.004 6.004 0 0115.917 9h-1.946zm-2.003 2H8.032c.093 1.414.377 2.649.766 3.556.24.56.5.948.737 1.182.233.23.389.262.465.262.076 0 .232-.032.465-.262.238-.234.498-.623.737-1.182.389-.907.673-2.142.766-3.556zm1.166 4.118c.454-1.147.748-2.572.837-4.118h1.946a6.004 6.004 0 01-2.783 4.118zm-6.268 0C6.412 13.97 6.118 12.546 6.03 11H4.083a6.004 6.004 0 002.783 4.118z" clipRule="evenodd" />
+
+              <div className="text-center">
+                <div className="bg-kraken-purple/10 rounded-lg p-4 mb-3">
+                  <svg className="w-8 h-8 text-kraken-accent mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <h3 className="font-bold text-white mb-2">Multi-Chain</h3>
-                <p className="text-sm text-gray-400">Support for Ethereum, Polygon, Arbitrum & more</p>
+                <h4 className="text-white font-semibold text-sm mb-1">Multi-Chain</h4>
+                <p className="text-gray-400 text-xs">Multiple networks</p>
               </div>
             </div>
           </div>
@@ -121,7 +119,7 @@ export default function Home() {
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-8">
               <h2 className="text-3xl font-bold text-white mb-3">Select Contract</h2>
-              <p className="text-gray-400">Choose the transfer contract to use</p>
+              <p className="text-gray-400">Choose or deploy your transfer scheduler contract</p>
             </div>
             <ContractSelector onAddressSelected={setContractAddr} />
           </div>
@@ -137,17 +135,10 @@ export default function Home() {
         )}
       </div>
 
-      <footer className="bg-kraken-dark/50 border-t border-kraken-purple/20 mt-20">
-        <div className="max-w-7xl mx-auto px-6 py-8">
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-gray-400">
-              © 2025 ZeGas Transfer. Built on Ethereum.
-            </p>
-            <div className="flex gap-6 text-sm text-gray-400">
-              <a href="#" className="hover:text-kraken-purple transition-colors">Docs</a>
-              <a href="#" className="hover:text-kraken-purple transition-colors">GitHub</a>
-              <a href="#" className="hover:text-kraken-purple transition-colors">Support</a>
-            </div>
+      <footer className="border-t border-kraken-purple/20 mt-20">
+        <div className="max-w-6xl mx-auto px-6 py-6">
+          <div className="text-center text-sm text-gray-400">
+            © 2025 ZeGas Transfer · Built on Ethereum
           </div>
         </div>
       </footer>
