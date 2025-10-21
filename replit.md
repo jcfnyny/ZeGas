@@ -43,6 +43,19 @@ Zegas is a blockchain-based task scheduler application built with Next.js and Et
   - Consistent hover and transition animations
 - Maintained visual hierarchy and accessibility across all user flows
 
+### Contract Deployment UI (October 21, 2025)
+- Added browser-based contract deployment with `ContractDeployer` component
+- Replaced CLI instruction with interactive "Deploy Contract" button
+- Configurable deployment parameters:
+  - Network selection (Ethereum, Sepolia, Polygon, Arbitrum, Custom RPC)
+  - Gas price threshold limits (waits for gas to be below threshold)
+  - Optional Etherscan contract verification with API key
+  - Secure private key handling (not stored, used only for deployment)
+- Created `/api/deploy-contract` Next.js API endpoint for secure deployment
+- Automatic contract address population and localStorage persistence after deployment
+- Comprehensive error handling and deployment status feedback
+- Fixed OpenZeppelin Contracts v5.x compatibility (ReentrancyGuard import path, Ownable constructor)
+
 ## Project Architecture
 
 ### Structure
