@@ -1,11 +1,35 @@
-# Zegas Scheduler
+# ZeGas Smart Transfer
 
 ## Overview
-Zegas is a blockchain-based task scheduler application built with Next.js and Ethereum smart contracts. It allows users to schedule transactions on the Ethereum blockchain and includes a relayer bot that watches for and executes scheduled transactions automatically.
+ZeGas Smart Transfer is a gas-price-aware token transfer scheduler built with Next.js and Ethereum smart contracts. It monitors real-time gas prices (via 1inch or Chainlink oracles) and automatically executes transfers only when gas fees meet user-defined thresholds, optimizing cost, timing, and reliability.
 
-**Current State**: Successfully migrated from Vercel to Replit. The development server is running and the application is functional.
+**Current State**: Major redesign to implement PRD requirements for gas-aware scheduling with time windows, permit support (EIP-2612), and automated relayer execution.
 
-## Recent Changes (October 21, 2025)
+## Recent Changes
+
+### Gas-Aware Scheduling Implementation (October 21, 2025 - PRD Implementation)
+- **New Smart Contract**: `ZegasSmartTransfer.sol` with comprehensive gas-price-aware scheduling
+  - Gas price thresholds (maxBaseFeeGwei, maxPriorityFeeGwei, maxTotalFeeGwei)
+  - Time windows (startTime, endTime) instead of single execution time
+  - Execute-on-expiry option for guaranteed execution
+  - Permit support (EIP-2612) for gasless approvals
+  - Platform fee system with basis points configuration
+  - Authorized relayer system for automated execution
+- **Gas Oracle Service**: Real-time monitoring via 1inch API with RPC fallback
+  - Fetches current base fee, priority fee, and total gas prices
+  - Supports Ethereum, Polygon, Arbitrum, and Sepolia
+  - 12-second polling for optimal execution timing
+- **Relayer Service**: Automated job execution engine
+  - Monitors scheduled jobs and checks gas conditions
+  - Executes transfers when both time and gas thresholds are met
+  - Event-driven architecture for new job detection
+  - Configurable retry and monitoring logic
+- **Frontend Components**:
+  - `GasPriceMonitor.tsx`: Real-time gas price display
+  - API endpoint `/api/gas-prices` for fetching current network fees
+- **Compiler Configuration**: Enabled viaIR and optimizer to handle complex contract logic
+
+### Previous Changes (October 21, 2025)
 
 ### Vercel to Replit Migration
 - Updated Next.js dev and production servers to use port 5000 and bind to 0.0.0.0 for Replit compatibility
@@ -75,8 +99,13 @@ Zegas is a blockchain-based task scheduler application built with Next.js and Et
 This is a monorepo containing:
 
 - **/contracts**: Solidity smart contracts
-  - `ZegasScheduler.sol`: Original scheduler contract for general transactions
-  - `ZegasTokenTransfer.sol`: Token transfer scheduler with ERC20 and native token support
+  - `ZegasSmartTransfer.sol`: **PRIMARY** - Gas-aware transfer scheduler with time windows and permit support
+  - `ZegasScheduler.sol`: Legacy scheduler contract
+  - `ZegasTokenTransfer.sol`: Legacy token transfer scheduler
+  
+- **/services**: Backend services
+  - `gasOracle.ts`: Gas price monitoring service (1inch + RPC fallback)
+  - `relayer.ts`: Automated job execution engine
   
 - **/frontend**: Next.js application (pages directory)
   - `pages/`: Page routes
@@ -91,8 +120,9 @@ This is a monorepo containing:
   - `styles/`: Global CSS and Tailwind configuration
   
 - **/scripts**: Deployment and utility scripts
-  - `deploy.ts`: Deploy ZegasScheduler contract
-  - `deploy-transfer.ts`: Deploy ZegasTokenTransfer contract
+  - `deploy-smart-transfer.ts`: **PRIMARY** - Deploy ZegasSmartTransfer contract
+  - `deploy.ts`: Legacy ZegasScheduler deployment
+  - `deploy-transfer.ts`: Legacy ZegasTokenTransfer deployment
   - `fund-relayer.ts`: Script to fund the relayer wallet
   
 - **/bots**: Background automation

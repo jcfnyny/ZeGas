@@ -2,4 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export { ZegasScheduler__factory } from "./ZegasScheduler__factory";
+export { ZegasSmartTransfer__factory } from "./ZegasSmartTransfer__factory";
 export { ZegasTokenTransfer__factory } from "./ZegasTokenTransfer__factory";

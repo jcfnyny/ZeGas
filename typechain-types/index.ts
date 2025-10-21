@@ -10,6 +10,8 @@ export type { Ownable } from "./@openzeppelin/contracts/access/Ownable";
 export { Ownable__factory } from "./factories/@openzeppelin/contracts/access/Ownable__factory";
 export type { IERC1363 } from "./@openzeppelin/contracts/interfaces/IERC1363";
 export { IERC1363__factory } from "./factories/@openzeppelin/contracts/interfaces/IERC1363__factory";
+export type { IERC20Permit } from "./@openzeppelin/contracts/token/ERC20/extensions/IERC20Permit";
+export { IERC20Permit__factory } from "./factories/@openzeppelin/contracts/token/ERC20/extensions/IERC20Permit__factory";
 export type { IERC20 } from "./@openzeppelin/contracts/token/ERC20/IERC20";
 export { IERC20__factory } from "./factories/@openzeppelin/contracts/token/ERC20/IERC20__factory";
 export type { SafeERC20 } from "./@openzeppelin/contracts/token/ERC20/utils/SafeERC20";
@@ -20,5 +22,7 @@ export type { ReentrancyGuard } from "./@openzeppelin/contracts/utils/Reentrancy
 export { ReentrancyGuard__factory } from "./factories/@openzeppelin/contracts/utils/ReentrancyGuard__factory";
 export type { ZegasScheduler } from "./contracts/ZegasScheduler";
 export { ZegasScheduler__factory } from "./factories/contracts/ZegasScheduler__factory";
+export type { ZegasSmartTransfer } from "./contracts/ZegasSmartTransfer";
+export { ZegasSmartTransfer__factory } from "./factories/contracts/ZegasSmartTransfer__factory";
 export type { ZegasTokenTransfer } from "./contracts/ZegasTokenTransfer";
 export { ZegasTokenTransfer__factory } from "./factories/contracts/ZegasTokenTransfer__factory";

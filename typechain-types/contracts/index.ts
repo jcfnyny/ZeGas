@@ -2,4 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { ZegasScheduler } from "./ZegasScheduler";
+export type { ZegasSmartTransfer } from "./ZegasSmartTransfer";
 export type { ZegasTokenTransfer } from "./ZegasTokenTransfer";
