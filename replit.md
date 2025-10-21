@@ -21,24 +21,40 @@ Zegas is a blockchain-based task scheduler application built with Next.js and Et
 - Fixed TypeScript configuration (ES2020 target) and added window.ethereum type definitions
 - Improved UI with better messaging and validation for contract addresses
 
+### Token Transfer Features (October 21, 2025)
+- Complete redesign with EigenLayer-inspired UI/UX
+- Added wallet connection with MetaMask integration
+- Multi-chain support (Ethereum, Sepolia, Polygon, Arbitrum)
+- Token selector with popular tokens (ETH, USDC, WBTC, etc.) and custom token input
+- Network switching functionality
+- Real-time balance display
+- New `ZegasTokenTransfer` contract for scheduled ERC20 and native token transfers
+- Transaction status indicators with step-by-step feedback
+
 ## Project Architecture
 
 ### Structure
 This is a monorepo containing:
 
 - **/contracts**: Solidity smart contracts
-  - `ZegasScheduler.sol`: Main scheduler contract built with OpenZeppelin
+  - `ZegasScheduler.sol`: Original scheduler contract for general transactions
+  - `ZegasTokenTransfer.sol`: Token transfer scheduler with ERC20 and native token support
   
 - **/frontend**: Next.js application (pages directory)
   - `pages/`: Page routes
   - `components/`: React components
-    - `SchedulerForm.tsx`: Main form for creating scheduled transactions
+    - `WalletConnect.tsx`: MetaMask wallet connection component
+    - `NetworkSelector.tsx`: Multi-chain network switching (Ethereum, Sepolia, Polygon, Arbitrum)
+    - `TokenSelector.tsx`: Token selection with popular tokens and custom input
+    - `TransferForm.tsx`: Main form for scheduling token transfers
     - `ContractSelector.tsx`: UI for selecting/entering contract address with localStorage persistence
+    - `SchedulerForm.tsx`: Legacy form for general transactions
   - `types/`: TypeScript type definitions
   - `styles/`: Global CSS and Tailwind configuration
   
 - **/scripts**: Deployment and utility scripts
-  - `deploy.ts`: Contract deployment script
+  - `deploy.ts`: Deploy ZegasScheduler contract
+  - `deploy-transfer.ts`: Deploy ZegasTokenTransfer contract
   - `fund-relayer.ts`: Script to fund the relayer wallet
   
 - **/bots**: Background automation
@@ -77,8 +93,9 @@ This runs on port 5000 and binds to 0.0.0.0 for Replit compatibility.
 
 ### Other Commands
 - `npm run compile`: Compile smart contracts with Hardhat
-- `npm run deploy`: Deploy contracts to Sepolia network
-- `npm run watcher`: Start the relayer bot
+- `npm run deploy`: Deploy ZegasScheduler contract to Sepolia network
+- `npx hardhat run scripts/deploy-transfer.ts --network sepolia`: Deploy ZegasTokenTransfer contract
+- `npm run watcher`: Start the relayer bot (for ZegasScheduler)
 
 ## Deployment
 The project is configured for Replit deployment with autoscaling:
