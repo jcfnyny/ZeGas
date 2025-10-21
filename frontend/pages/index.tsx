@@ -6,6 +6,7 @@ const WalletConnect = dynamic(() => import("../components/WalletConnect"), { ssr
 const NetworkSelector = dynamic(() => import("../components/NetworkSelector"), { ssr: false });
 const ContractSelector = dynamic(() => import("../components/ContractSelector"), { ssr: false });
 const TransferForm = dynamic(() => import("../components/TransferForm"), { ssr: false });
+const GasPriceMonitor = dynamic(() => import("../components/GasPriceMonitor"), { ssr: false });
 
 import type { Network } from "../components/NetworkSelector";
 
@@ -67,8 +68,8 @@ export default function Home() {
         {!userAddress ? (
           <div className="max-w-xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-white mb-4">Schedule Token Transfers</h2>
-              <p className="text-lg text-gray-300">Lock tokens now, transfer them later with blockchain-based scheduling</p>
+              <h2 className="text-4xl font-bold text-white mb-4">Gas-Aware Smart Transfers</h2>
+              <p className="text-lg text-gray-300">Schedule transfers that execute only when gas prices meet your thresholds</p>
             </div>
 
             <div className="bg-kraken-dark/60 backdrop-blur-md rounded-xl p-8 border border-kraken-purple/30">
@@ -97,11 +98,11 @@ export default function Home() {
               <div className="text-center">
                 <div className="bg-kraken-purple/10 rounded-lg p-4 mb-3">
                   <svg className="w-8 h-8 text-kraken-accent mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
                 </div>
-                <h4 className="text-white font-semibold text-sm mb-1">Scheduled</h4>
-                <p className="text-gray-400 text-xs">Time-locked transfers</p>
+                <h4 className="text-white font-semibold text-sm mb-1">Gas-Optimized</h4>
+                <p className="text-gray-400 text-xs">Execute at optimal prices</p>
               </div>
 
               <div className="text-center">
@@ -124,7 +125,14 @@ export default function Home() {
             <ContractSelector onAddressSelected={setContractAddr} />
           </div>
         ) : (
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-4xl mx-auto space-y-6">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-white mb-2">Gas-Aware Token Transfers</h2>
+              <p className="text-gray-400">Schedule transfers to execute when gas prices meet your thresholds</p>
+            </div>
+            
+            <GasPriceMonitor chainId={currentChainId} />
+            
             <TransferForm 
               contractAddress={contractAddr}
               userAddress={userAddress}
