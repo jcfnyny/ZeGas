@@ -82,16 +82,16 @@ export default function ContractSelector({ onAddressSelected }: Props) {
       : customAddress;
     
     return (
-      <div className="w-full max-w-md space-y-4 p-6 bg-gray-50 rounded-lg">
+      <div className="w-full max-w-md space-y-4 p-6 bg-kraken-dark/50 backdrop-blur-xl rounded-lg border border-kraken-purple/20">
         <div className="space-y-2">
-          <p className="text-sm text-gray-600">Connected to contract:</p>
-          <code className="block text-xs bg-white p-2 rounded border break-all">
+          <p className="text-sm text-gray-400">Connected to contract:</p>
+          <code className="block text-xs bg-kraken-darker p-3 rounded border border-kraken-purple/20 break-all text-gray-300">
             {currentAddress}
           </code>
         </div>
         <button
           onClick={handleReset}
-          className="w-full bg-gray-500 text-white p-2 rounded hover:bg-gray-600"
+          className="w-full bg-kraken-dark border border-kraken-purple/30 text-white p-2 rounded hover:bg-kraken-purple/20 transition-colors"
         >
           Change Contract
         </button>
@@ -100,9 +100,9 @@ export default function ContractSelector({ onAddressSelected }: Props) {
   }
 
   return (
-    <div className="w-full max-w-md space-y-4 p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-xl font-semibold mb-2">Connect to ZegasScheduler</h2>
-      <p className="text-sm text-gray-600 mb-4">
+    <div className="w-full max-w-md space-y-4 p-6 bg-kraken-dark/50 backdrop-blur-xl rounded-lg shadow-2xl border border-kraken-purple/20">
+      <h2 className="text-xl font-semibold mb-2 text-white">Connect to ZegasScheduler</h2>
+      <p className="text-sm text-gray-400 mb-4">
         Enter your deployed contract address to start scheduling transactions.
       </p>
       
@@ -113,9 +113,9 @@ export default function ContractSelector({ onAddressSelected }: Props) {
             name="contract-option"
             checked={selectedOption === "preset"}
             onChange={() => setSelectedOption("preset")}
-            className="w-4 h-4"
+            className="w-4 h-4 accent-kraken-purple"
           />
-          <span className="text-sm">Use official contract</span>
+          <span className="text-sm text-white">Use official contract</span>
         </label>
 
         {selectedOption === "preset" && (
@@ -123,7 +123,7 @@ export default function ContractSelector({ onAddressSelected }: Props) {
             <select
               value={presetIndex}
               onChange={(e) => setPresetIndex(Number(e.target.value))}
-              className="w-full border p-2 rounded text-sm"
+              className="w-full border border-kraken-purple/30 bg-kraken-darker text-white p-2 rounded text-sm"
               disabled={KNOWN_CONTRACTS[presetIndex].isPlaceholder}
             >
               {KNOWN_CONTRACTS.map((contract, idx) => (
@@ -133,7 +133,7 @@ export default function ContractSelector({ onAddressSelected }: Props) {
               ))}
             </select>
             {KNOWN_CONTRACTS[presetIndex].isPlaceholder && (
-              <p className="text-xs text-amber-600 bg-amber-50 p-2 rounded">
+              <p className="text-xs text-amber-400 bg-amber-900/30 p-2 rounded border border-amber-700/50">
                 ⚠️ No official contracts available yet. Use the custom option below.
               </p>
             )}
@@ -146,9 +146,9 @@ export default function ContractSelector({ onAddressSelected }: Props) {
             name="contract-option"
             checked={selectedOption === "custom"}
             onChange={() => setSelectedOption("custom")}
-            className="w-4 h-4"
+            className="w-4 h-4 accent-kraken-purple"
           />
-          <span className="text-sm">Enter your contract address</span>
+          <span className="text-sm text-white">Enter your contract address</span>
         </label>
 
         {selectedOption === "custom" && (
@@ -157,7 +157,7 @@ export default function ContractSelector({ onAddressSelected }: Props) {
             value={customAddress}
             onChange={(e) => setCustomAddress(e.target.value)}
             placeholder="0x..."
-            className="w-full border p-2 rounded ml-6 font-mono text-sm"
+            className="w-full border border-kraken-purple/30 bg-kraken-darker text-white p-2 rounded ml-6 font-mono text-sm focus:border-kraken-purple focus:outline-none"
           />
         )}
       </div>
@@ -165,16 +165,16 @@ export default function ContractSelector({ onAddressSelected }: Props) {
       <div className="pt-4">
         <button
           onClick={handleConnect}
-          className="w-full bg-blue-600 text-white p-3 rounded hover:bg-blue-700 font-semibold transition-colors"
+          className="w-full bg-gradient-to-r from-kraken-purple to-kraken-accent text-white p-3 rounded hover:from-kraken-accent hover:to-kraken-purple font-semibold transition-all shadow-lg shadow-kraken-purple/30"
         >
           Connect to Contract
         </button>
       </div>
 
-      <div className="bg-blue-50 p-4 rounded text-sm space-y-2">
-        <p className="font-semibold text-blue-900">📝 Need to deploy a contract?</p>
-        <p className="text-blue-800">
-          Run <code className="bg-blue-100 px-1 rounded">npm run deploy</code> in the terminal to deploy ZegasScheduler to Sepolia testnet.
+      <div className="bg-kraken-purple/10 border border-kraken-purple/30 p-4 rounded text-sm space-y-2">
+        <p className="font-semibold text-kraken-light">📝 Need to deploy a contract?</p>
+        <p className="text-gray-300">
+          Run <code className="bg-kraken-darker px-2 py-1 rounded text-kraken-accent">npm run deploy</code> in the terminal to deploy ZegasScheduler to Sepolia testnet.
         </p>
       </div>
     </div>

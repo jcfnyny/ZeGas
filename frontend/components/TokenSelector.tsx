@@ -119,21 +119,21 @@ export default function TokenSelector({ chainId, selectedToken, onTokenSelect }:
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 flex items-center justify-between hover:border-blue-400 transition-colors"
+        className="w-full bg-kraken-darker border border-kraken-purple/30 rounded-lg px-4 py-3 flex items-center justify-between hover:border-kraken-purple transition-colors"
       >
         <div className="flex items-center gap-3">
           {selectedToken ? (
             <>
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-sm">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-kraken-purple to-kraken-accent flex items-center justify-center text-white font-bold text-sm">
                 {selectedToken.symbol.slice(0, 1)}
               </div>
               <div className="text-left">
-                <div className="text-sm font-semibold text-gray-900">{selectedToken.symbol}</div>
-                <div className="text-xs text-gray-500">{selectedToken.name}</div>
+                <div className="text-sm font-semibold text-white">{selectedToken.symbol}</div>
+                <div className="text-xs text-gray-400">{selectedToken.name}</div>
               </div>
             </>
           ) : (
-            <span className="text-gray-500">Select a token</span>
+            <span className="text-gray-400">Select a token</span>
           )}
         </div>
         <svg
@@ -147,37 +147,37 @@ export default function TokenSelector({ chainId, selectedToken, onTokenSelect }:
       </button>
 
       {isOpen && (
-        <div className="absolute top-full mt-2 w-full bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50 max-h-96 overflow-y-auto">
-          <div className="px-3 pb-2 border-b border-gray-100">
-            <p className="text-xs font-semibold text-gray-500 uppercase">Popular Tokens</p>
+        <div className="absolute top-full mt-2 w-full bg-kraken-dark rounded-lg shadow-2xl border border-kraken-purple/30 py-2 z-50 max-h-96 overflow-y-auto backdrop-blur-xl">
+          <div className="px-3 pb-2 border-b border-kraken-purple/20">
+            <p className="text-xs font-semibold text-gray-400 uppercase">Popular Tokens</p>
           </div>
 
           {tokens.map((token) => (
             <button
               key={token.address}
               onClick={() => handleSelectToken(token)}
-              className={`w-full px-4 py-3 text-left hover:bg-blue-50 transition-colors flex items-center gap-3 ${
-                selectedToken?.address === token.address ? "bg-blue-50" : ""
+              className={`w-full px-4 py-3 text-left hover:bg-kraken-purple/20 transition-colors flex items-center gap-3 ${
+                selectedToken?.address === token.address ? "bg-kraken-purple/30" : ""
               }`}
             >
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-sm">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-kraken-purple to-kraken-accent flex items-center justify-center text-white font-bold text-sm">
                 {token.symbol.slice(0, 1)}
               </div>
               <div className="flex-1">
-                <div className="text-sm font-semibold text-gray-900">{token.symbol}</div>
-                <div className="text-xs text-gray-500">{token.name}</div>
+                <div className="text-sm font-semibold text-white">{token.symbol}</div>
+                <div className="text-xs text-gray-400">{token.name}</div>
               </div>
               {token.isNative && (
-                <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Native</span>
+                <span className="text-xs bg-green-900/50 text-green-300 px-2 py-1 rounded border border-green-700/50">Native</span>
               )}
             </button>
           ))}
 
-          <div className="border-t border-gray-100 mt-2 pt-2">
+          <div className="border-t border-kraken-purple/20 mt-2 pt-2">
             {!showCustom ? (
               <button
                 onClick={() => setShowCustom(true)}
-                className="w-full px-4 py-2 text-left text-sm text-blue-600 hover:bg-blue-50 transition-colors"
+                className="w-full px-4 py-2 text-left text-sm text-kraken-accent hover:bg-kraken-purple/20 transition-colors"
               >
                 + Add custom token
               </button>
@@ -188,12 +188,12 @@ export default function TokenSelector({ chainId, selectedToken, onTokenSelect }:
                   value={customAddress}
                   onChange={(e) => setCustomAddress(e.target.value)}
                   placeholder="0x... token address"
-                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
+                  className="w-full border border-kraken-purple/30 bg-kraken-darker text-white rounded px-3 py-2 text-sm focus:border-kraken-purple focus:outline-none"
                 />
                 <div className="flex gap-2">
                   <button
                     onClick={handleCustomToken}
-                    className="flex-1 bg-blue-600 text-white text-sm py-2 rounded hover:bg-blue-700"
+                    className="flex-1 bg-gradient-to-r from-kraken-purple to-kraken-accent text-white text-sm py-2 rounded hover:from-kraken-accent hover:to-kraken-purple"
                   >
                     Add
                   </button>
@@ -202,7 +202,7 @@ export default function TokenSelector({ chainId, selectedToken, onTokenSelect }:
                       setShowCustom(false);
                       setCustomAddress("");
                     }}
-                    className="flex-1 bg-gray-200 text-gray-700 text-sm py-2 rounded hover:bg-gray-300"
+                    className="flex-1 bg-kraken-dark border border-kraken-purple/30 text-gray-300 text-sm py-2 rounded hover:bg-kraken-purple/20"
                   >
                     Cancel
                   </button>

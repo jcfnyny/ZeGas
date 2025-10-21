@@ -81,15 +81,15 @@ export default function WalletConnect({ onConnect, onDisconnect }: Props) {
   if (account) {
     return (
       <div className="flex items-center gap-3">
-        <div className="bg-white border border-gray-200 rounded-lg px-4 py-2 flex items-center gap-2">
-          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-          <span className="text-sm font-medium text-gray-700">
+        <div className="bg-kraken-dark border border-kraken-purple/30 rounded-lg px-4 py-2 flex items-center gap-2">
+          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+          <span className="text-sm font-medium text-white">
             {account.slice(0, 6)}...{account.slice(-4)}
           </span>
         </div>
         <button
           onClick={disconnectWallet}
-          className="text-sm text-gray-600 hover:text-gray-800 transition-colors"
+          className="text-sm text-gray-400 hover:text-white transition-colors"
         >
           Disconnect
         </button>
@@ -101,7 +101,7 @@ export default function WalletConnect({ onConnect, onDisconnect }: Props) {
     <button
       onClick={connectWallet}
       disabled={isConnecting}
-      className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      className="bg-gradient-to-r from-kraken-purple to-kraken-accent hover:from-kraken-accent hover:to-kraken-purple text-white font-semibold px-6 py-2.5 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-kraken-purple/30"
     >
       {isConnecting ? "Connecting..." : "Connect Wallet"}
     </button>

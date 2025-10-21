@@ -93,12 +93,12 @@ export default function NetworkSelector({ currentChainId, onNetworkChange }: Pro
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-white border border-gray-200 rounded-lg px-4 py-2 flex items-center gap-2 hover:border-gray-300 transition-colors"
+        className="bg-kraken-dark border border-kraken-purple/30 rounded-lg px-4 py-2 flex items-center gap-2 hover:border-kraken-purple/50 transition-colors"
       >
-        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-        <span className="text-sm font-medium">{currentNetwork.name}</span>
+        <div className="w-2 h-2 bg-kraken-purple rounded-full"></div>
+        <span className="text-sm font-medium text-white">{currentNetwork.name}</span>
         <svg
-          className={`w-4 h-4 transition-transform ${isOpen ? "rotate-180" : ""}`}
+          className={`w-4 h-4 transition-transform text-white ${isOpen ? "rotate-180" : ""}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -108,16 +108,16 @@ export default function NetworkSelector({ currentChainId, onNetworkChange }: Pro
       </button>
 
       {isOpen && (
-        <div className="absolute top-full mt-2 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-[200px] z-50">
+        <div className="absolute top-full mt-2 right-0 bg-kraken-dark rounded-lg shadow-2xl border border-kraken-purple/30 py-2 min-w-[200px] z-50 backdrop-blur-xl">
           {SUPPORTED_NETWORKS.map((network) => (
             <button
               key={network.chainId}
               onClick={() => switchNetwork(network)}
-              className={`w-full px-4 py-2 text-left hover:bg-gray-50 transition-colors flex items-center gap-2 ${
-                network.chainId === currentChainId ? "bg-blue-50 text-blue-700" : "text-gray-700"
+              className={`w-full px-4 py-2 text-left hover:bg-kraken-purple/20 transition-colors flex items-center gap-2 ${
+                network.chainId === currentChainId ? "bg-kraken-purple/30 text-white" : "text-gray-300"
               }`}
             >
-              <div className={`w-2 h-2 rounded-full ${network.chainId === currentChainId ? "bg-blue-500" : "bg-gray-300"}`}></div>
+              <div className={`w-2 h-2 rounded-full ${network.chainId === currentChainId ? "bg-kraken-purple" : "bg-gray-500"}`}></div>
               <span className="text-sm font-medium">{network.name}</span>
             </button>
           ))}
