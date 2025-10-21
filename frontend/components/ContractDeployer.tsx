@@ -64,13 +64,23 @@ export default function ContractDeployer({ onDeploySuccess }: Props) {
         throw new Error(data.error || "Deployment failed");
       }
 
-      setDeploymentStatus(`✅ Contract deployed successfully!`);
+      let successMessage = `✅ Contract deployed to ${data.address.substring(0, 10)}...`;
+      
+      if (data.verificationStatus === "verified") {
+        successMessage += "\n✅ Contract verified on Etherscan!";
+      } else if (data.verificationStatus === "already_verified") {
+        successMessage += "\n✅ Contract was already verified!";
+      } else if (data.verificationStatus === "failed") {
+        successMessage += "\n⚠️ Contract deployed but verification failed";
+      }
+      
+      setDeploymentStatus(successMessage);
       setTimeout(() => {
         onDeploySuccess(data.address);
         setIsOpen(false);
         setPrivateKey("");
         setEtherscanApiKey("");
-      }, 2000);
+      }, 3000);
     } catch (err: any) {
       setError(err.message || "Deployment failed");
     } finally {

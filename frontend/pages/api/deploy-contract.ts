@@ -1,6 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ethers } from "ethers";
 
+function getNetworkName(chainId: number): string {
+  const networks: { [key: number]: string } = {
+    1: "mainnet",
+    11155111: "sepolia",
+    137: "polygon",
+    42161: "arbitrum",
+  };
+  return networks[chainId] || "unknown";
+}
+
 // ZegasTokenTransfer contract bytecode and ABI
 // This is the compiled contract - in production, you'd import this from artifacts
 const CONTRACT_ABI = [
@@ -34,7 +44,7 @@ export default async function handler(
   }
 
   try {
-    const { rpcUrl, privateKey, maxGasPrice, chainId }: DeployRequest = req.body;
+    const { rpcUrl, privateKey, maxGasPrice, chainId, verifyContract, etherscanApiKey }: DeployRequest = req.body;
 
     if (!rpcUrl || !privateKey) {
       return res.status(400).json({ error: "Missing required fields" });
@@ -101,15 +111,44 @@ export default async function handler(
     const contract = await factory.deploy();
     await contract.waitForDeployment();
     const address = await contract.getAddress();
+    const txHash = contract.deploymentTransaction()?.hash;
 
-    // Note: Contract verification would be done here if etherscanApiKey is provided
-    // This would require additional API calls to Etherscan's verification endpoint
+    // Verify contract on Etherscan if requested
+    let verificationStatus = "not_requested";
+    if (verifyContract && etherscanApiKey) {
+      try {
+        // Wait a bit for the deployment to be indexed
+        await new Promise(resolve => setTimeout(resolve, 10000));
+        
+        // Call Hardhat verify task
+        const { execSync } = require('child_process');
+        const rootPath = require('path').join(process.cwd(), '..');
+        
+        execSync(
+          `cd ${rootPath} && npx hardhat verify --network ${getNetworkName(chainId)} ${address}`,
+          {
+            env: { 
+              ...process.env, 
+              ETHERSCAN_API_KEY: etherscanApiKey 
+            },
+            stdio: 'pipe'
+          }
+        );
+        verificationStatus = "verified";
+      } catch (error: any) {
+        console.error("Verification error:", error);
+        verificationStatus = error.message?.includes("already verified") 
+          ? "already_verified" 
+          : "failed";
+      }
+    }
 
     return res.status(200).json({ 
       address,
       deployer: wallet.address,
       chainId,
-      txHash: contract.deploymentTransaction()?.hash
+      txHash,
+      verificationStatus
     });
 
   } catch (error: any) {
