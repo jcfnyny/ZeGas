@@ -29,7 +29,9 @@ const CONTRACT_ABI = [
 interface DeployRequest {
   rpcUrl: string;
   privateKey: string;
+  minGasPrice?: number;
   maxGasPrice?: number;
+  gasTimeout?: number;
   chainId: number;
   verifyContract?: boolean;
   etherscanApiKey?: string;
@@ -44,7 +46,7 @@ export default async function handler(
   }
 
   try {
-    const { rpcUrl, privateKey, maxGasPrice, chainId, verifyContract, etherscanApiKey }: DeployRequest = req.body;
+    const { rpcUrl, privateKey, minGasPrice, maxGasPrice, gasTimeout, chainId, verifyContract, etherscanApiKey }: DeployRequest = req.body;
 
     if (!rpcUrl || !privateKey) {
       return res.status(400).json({ error: "Missing required fields" });
@@ -65,18 +67,26 @@ export default async function handler(
     // Wait for gas price if needed
     if (maxGasPrice) {
       let currentGasPrice = await provider.getFeeData();
-      let attempts = 0;
-      const maxAttempts = 10;
+      const startTime = Date.now();
+      const timeoutMs = (gasTimeout || 300) * 1000;
       
-      while (currentGasPrice.gasPrice && currentGasPrice.gasPrice > ethers.parseUnits(maxGasPrice.toString(), "gwei") && attempts < maxAttempts) {
+      while (currentGasPrice.gasPrice && currentGasPrice.gasPrice > ethers.parseUnits(maxGasPrice.toString(), "gwei")) {
+        // Check timeout
+        if (Date.now() - startTime > timeoutMs) {
+          return res.status(400).json({ 
+            error: `Gas price timeout. Current: ${ethers.formatUnits(currentGasPrice.gasPrice || 0n, "gwei")} gwei, Max: ${maxGasPrice} gwei. Waited ${gasTimeout}s.` 
+          });
+        }
+        
         await new Promise(resolve => setTimeout(resolve, 5000));
         currentGasPrice = await provider.getFeeData();
-        attempts++;
       }
       
-      if (attempts >= maxAttempts) {
+      // Verify gas is within acceptable range
+      const currentGwei = Number(ethers.formatUnits(currentGasPrice.gasPrice || 0n, "gwei"));
+      if (minGasPrice && currentGwei < minGasPrice) {
         return res.status(400).json({ 
-          error: `Gas price exceeded max threshold. Current: ${ethers.formatUnits(currentGasPrice.gasPrice || 0n, "gwei")} gwei, Max: ${maxGasPrice} gwei` 
+          error: `Gas price too low. Current: ${currentGwei} gwei, Min acceptable: ${minGasPrice} gwei` 
         });
       }
     }
