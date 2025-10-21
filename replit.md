@@ -46,13 +46,25 @@ Zegas is a blockchain-based task scheduler application built with Next.js and Et
 ### Contract Deployment UI (October 21, 2025)
 - Added browser-based contract deployment with `ContractDeployer` component
 - Replaced CLI instruction with interactive "Deploy Contract" button
-- Configurable deployment parameters:
-  - Network selection (Ethereum, Sepolia, Polygon, Arbitrum, Custom RPC)
-  - Gas price threshold limits (waits for gas to be below threshold)
-  - Optional Etherscan contract verification with API key
-  - Secure private key handling (not stored, used only for deployment)
-- Created `/api/deploy-contract` Next.js API endpoint for secure deployment
+- Comprehensive deployment parameters with helper text:
+  - **Contract Information Panel**: Shows contract name, version, features, and estimated gas cost
+  - **Network Selection**: Ethereum, Sepolia, Polygon, Arbitrum, or Custom RPC with chainId
+  - **Gas Price Control**:
+    - Minimum acceptable gas price (Gwei)
+    - Maximum gas price threshold (deployment waits if exceeded)
+    - Gas wait timeout (seconds) - how long to wait for favorable gas prices
+  - **Security**: Private key input with warning (not stored, used only for deployment)
+  - **Verification**: Optional Etherscan contract verification with API key
+- Created `/api/deploy-contract` Next.js API endpoint:
+  - Validates wallet balance before deployment
+  - Implements gas price waiting loop with configurable timeout
+  - Validates gas price within min/max thresholds
+  - Handles Etherscan verification with network-specific API URLs
 - Automatic contract address population and localStorage persistence after deployment
+- Professional SVG icons throughout (no emojis):
+  - Sparkle icon on Deploy button
+  - Spinner animation during deployment
+  - Properly sized icons (w-4 to w-6) for visual consistency
 - Comprehensive error handling and deployment status feedback
 - Fixed OpenZeppelin Contracts v5.x compatibility (ReentrancyGuard import path, Ownable constructor)
 
