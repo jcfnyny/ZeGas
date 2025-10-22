@@ -27,6 +27,7 @@ const CONTRACT_ABI = [
 ];
 
 interface DeployRequest {
+  contractType?: "l1" | "l2";
   rpcUrl: string;
   privateKey: string;
   minGasPrice?: number;
@@ -50,6 +51,7 @@ export default async function handler(
 
   try {
     const { 
+      contractType = "l1",
       rpcUrl, 
       privateKey, 
       minGasPrice, 
@@ -115,19 +117,33 @@ export default async function handler(
     const fs = require('fs');
     const path = require('path');
     
+    // Select contract based on type
+    const contractName = contractType === "l2" ? "ZegasL2Optimizer" : "ZegasSmartTransfer";
+    const contractFile = contractType === "l2" ? "ZegasL2Optimizer.sol" : "ZegasSmartTransfer.sol";
+    
     let contractArtifact;
     try {
       // Try to read from Hardhat artifacts
-      const artifactPath = path.join(process.cwd(), '../artifacts/contracts/ZegasSmartTransfer.sol/ZegasSmartTransfer.json');
+      const artifactPath = path.join(process.cwd(), `../artifacts/contracts/${contractFile}/${contractName}.json`);
       contractArtifact = JSON.parse(fs.readFileSync(artifactPath, 'utf8'));
     } catch (error) {
       return res.status(500).json({ 
-        error: "Contract artifacts not found. Please run 'npm run compile' first." 
+        error: `Contract artifacts not found for ${contractName}. Please run 'npm run compile' first.` 
       });
     }
 
     // Determine fee collector (use deployer address if not specified)
     const finalFeeCollector = feeCollector || wallet.address;
+
+    // Prepare constructor parameters based on contract type
+    let constructorArgs: any[];
+    if (contractType === "l2") {
+      // ZegasL2Optimizer: constructor(uint256 _platformFeeBps, address _feeCollector, address[] memory _initialRelayers)
+      constructorArgs = [platformFeeBps, finalFeeCollector, relayerAddresses];
+    } else {
+      // ZegasSmartTransfer: constructor(uint256 _platformFeeBps, address _feeCollector)
+      constructorArgs = [platformFeeBps, finalFeeCollector];
+    }
 
     // Deploy the contract with constructor parameters
     const factory = new ethers.ContractFactory(
@@ -136,23 +152,25 @@ export default async function handler(
       wallet
     );
 
-    const contract = await factory.deploy(platformFeeBps, finalFeeCollector);
+    const contract = await factory.deploy(...constructorArgs);
     await contract.waitForDeployment();
     const address = await contract.getAddress();
     const txHash = contract.deploymentTransaction()?.hash;
 
-    // Authorize relayers
-    const relayersToAuthorize = [...relayerAddresses];
-    if (!relayersToAuthorize.includes(wallet.address)) {
-      relayersToAuthorize.push(wallet.address);
-    }
+    // Authorize relayers (only for L1 contract, L2 handles this in constructor)
+    if (contractType === "l1") {
+      const relayersToAuthorize = [...relayerAddresses];
+      if (!relayersToAuthorize.includes(wallet.address)) {
+        relayersToAuthorize.push(wallet.address);
+      }
 
-    for (const relayerAddress of relayersToAuthorize) {
-      try {
-        const tx = await contract.setRelayerAuthorization(relayerAddress, true);
-        await tx.wait();
-      } catch (error) {
-        console.error(`Failed to authorize relayer ${relayerAddress}:`, error);
+      for (const relayerAddress of relayersToAuthorize) {
+        try {
+          const tx = await contract.setRelayerAuthorization(relayerAddress, true);
+          await tx.wait();
+        } catch (error) {
+          console.error(`Failed to authorize relayer ${relayerAddress}:`, error);
+        }
       }
     }
 
@@ -191,6 +209,8 @@ export default async function handler(
       deployer: wallet.address,
       chainId,
       txHash,
+      contractType,
+      contractName,
       verificationStatus
     });
 

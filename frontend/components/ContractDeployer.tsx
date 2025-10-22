@@ -14,6 +14,7 @@ const NETWORKS = [
 
 export default function ContractDeployer({ onDeploySuccess }: Props) {
   const [isOpen, setIsOpen] = useState(false);
+  const [contractType, setContractType] = useState<"l1" | "l2">("l1");
   const [network, setNetwork] = useState("sepolia");
   const [customRpcUrl, setCustomRpcUrl] = useState("");
   const [privateKey, setPrivateKey] = useState("");
@@ -55,6 +56,7 @@ export default function ContractDeployer({ onDeploySuccess }: Props) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          contractType,
           rpcUrl,
           privateKey: privateKey.startsWith("0x") ? privateKey : `0x${privateKey}`,
           minGasPrice: minGasPrice ? parseInt(minGasPrice) : undefined,
@@ -119,7 +121,7 @@ export default function ContractDeployer({ onDeploySuccess }: Props) {
       <div className="bg-kraken-dark border border-kraken-purple/30 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-gradient-to-r from-kraken-purple/20 to-kraken-accent/20 border-b border-kraken-purple/30 p-6 backdrop-blur-xl">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold text-white">Deploy ZegasTokenTransfer Contract</h2>
+            <h2 className="text-2xl font-bold text-white">Deploy ZeGas Contract</h2>
             <button
               onClick={() => setIsOpen(false)}
               className="text-gray-400 hover:text-white transition-colors"
@@ -127,10 +129,83 @@ export default function ContractDeployer({ onDeploySuccess }: Props) {
               ✕
             </button>
           </div>
-          <p className="text-gray-400 text-sm mt-2">Configure deployment parameters for your token transfer scheduler</p>
+          <p className="text-gray-400 text-sm mt-2">Choose your contract type and configure deployment parameters</p>
         </div>
 
         <div className="p-6 space-y-6">
+          {/* Contract Type Selector */}
+          <div className="space-y-3">
+            <label className="block text-sm font-semibold text-white mb-3">
+              Contract Type
+              <span className="text-gray-400 ml-2 font-normal text-xs">Choose your optimization strategy</span>
+            </label>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* L1-Focused Option */}
+              <button
+                onClick={() => setContractType("l1")}
+                className={`p-4 rounded-lg border-2 transition-all text-left ${
+                  contractType === "l1"
+                    ? "border-kraken-purple bg-kraken-purple/20 shadow-lg shadow-kraken-purple/30"
+                    : "border-kraken-purple/30 bg-kraken-darker/50 hover:border-kraken-purple/50"
+                }`}
+              >
+                <div className="flex items-start gap-3">
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center mt-0.5 ${
+                    contractType === "l1" ? "border-kraken-purple bg-kraken-purple" : "border-gray-500"
+                  }`}>
+                    {contractType === "l1" && (
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-sm font-semibold text-white mb-1">ZegasSmartTransfer</h4>
+                    <p className="text-xs text-gray-400 mb-2">L1-Focused Gas Optimizer</p>
+                    <ul className="text-xs text-gray-500 space-y-1">
+                      <li>✓ Gas-aware scheduling</li>
+                      <li>✓ Time windows</li>
+                      <li>✓ EIP-2612 permit support</li>
+                      <li>✓ Single-layer execution</li>
+                    </ul>
+                  </div>
+                </div>
+              </button>
+
+              {/* L2-Optimized Option */}
+              <button
+                onClick={() => setContractType("l2")}
+                className={`p-4 rounded-lg border-2 transition-all text-left ${
+                  contractType === "l2"
+                    ? "border-kraken-accent bg-kraken-accent/20 shadow-lg shadow-kraken-accent/30"
+                    : "border-kraken-purple/30 bg-kraken-darker/50 hover:border-kraken-purple/50"
+                }`}
+              >
+                <div className="flex items-start gap-3">
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center mt-0.5 ${
+                    contractType === "l2" ? "border-kraken-accent bg-kraken-accent" : "border-gray-500"
+                  }`}>
+                    {contractType === "l2" && (
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-sm font-semibold text-white mb-1 flex items-center gap-1">
+                      ZegasL2Optimizer
+                      <span className="text-xs bg-gradient-to-r from-kraken-purple to-kraken-accent text-white px-2 py-0.5 rounded-full">NEW</span>
+                    </h4>
+                    <p className="text-xs text-gray-400 mb-2">Cross-Layer Gas Optimizer</p>
+                    <ul className="text-xs text-gray-500 space-y-1">
+                      <li>✓ Multi-L2 routing (Arbitrum, Base, etc.)</li>
+                      <li>✓ Cross-chain messaging</li>
+                      <li>✓ Dynamic gas comparison</li>
+                      <li>✓ 95% cost reduction</li>
+                    </ul>
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
+
           {/* Contract Info */}
           <div className="bg-kraken-purple/10 border border-kraken-purple/20 rounded-lg p-4">
             <h3 className="text-sm font-semibold text-white mb-2 flex items-center gap-2">
@@ -140,10 +215,20 @@ export default function ContractDeployer({ onDeploySuccess }: Props) {
               Contract Information
             </h3>
             <div className="text-xs text-gray-300 space-y-1">
-              <p><span className="text-gray-400">Name:</span> ZegasSmartTransfer</p>
+              <p><span className="text-gray-400">Name:</span> {contractType === "l1" ? "ZegasSmartTransfer" : "ZegasL2Optimizer"}</p>
               <p><span className="text-gray-400">Version:</span> 2.0.0</p>
-              <p><span className="text-gray-400">Features:</span> Gas-aware scheduling, Time windows, EIP-2612 permit, Relayer system</p>
-              <p><span className="text-gray-400">Estimated Gas:</span> ~1.5M gas (~0.03 ETH at 20 Gwei)</p>
+              {contractType === "l1" ? (
+                <>
+                  <p><span className="text-gray-400">Features:</span> Gas-aware scheduling, Time windows, EIP-2612 permit, Relayer system</p>
+                  <p><span className="text-gray-400">Estimated Gas:</span> ~1.5M gas (~0.03 ETH at 20 Gwei)</p>
+                </>
+              ) : (
+                <>
+                  <p><span className="text-gray-400">Features:</span> Multi-L2 routing, Cross-chain messaging, Paymaster support, Batch bundling</p>
+                  <p><span className="text-gray-400">Supported Networks:</span> Arbitrum, Optimism, Base, zkSync, Linea, Scroll</p>
+                  <p><span className="text-gray-400">Estimated Gas:</span> ~2.0M gas (~0.04 ETH at 20 Gwei)</p>
+                </>
+              )}
             </div>
           </div>
 
