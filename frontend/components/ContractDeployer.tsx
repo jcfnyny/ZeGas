@@ -7,8 +7,13 @@ type Props = {
 const NETWORKS = [
   { id: "sepolia", name: "Sepolia Testnet", chainId: 11155111, rpcUrl: "https://eth-sepolia.g.alchemy.com/v2/demo" },
   { id: "mainnet", name: "Ethereum Mainnet", chainId: 1, rpcUrl: "https://eth-mainnet.g.alchemy.com/v2/demo" },
-  { id: "polygon", name: "Polygon", chainId: 137, rpcUrl: "https://polygon-rpc.com" },
   { id: "arbitrum", name: "Arbitrum One", chainId: 42161, rpcUrl: "https://arb1.arbitrum.io/rpc" },
+  { id: "optimism", name: "Optimism", chainId: 10, rpcUrl: "https://mainnet.optimism.io" },
+  { id: "base", name: "Base", chainId: 8453, rpcUrl: "https://mainnet.base.org" },
+  { id: "polygon", name: "Polygon", chainId: 137, rpcUrl: "https://polygon-rpc.com" },
+  { id: "zksync", name: "zkSync Era", chainId: 324, rpcUrl: "https://mainnet.era.zksync.io" },
+  { id: "linea", name: "Linea", chainId: 59144, rpcUrl: "https://rpc.linea.build" },
+  { id: "scroll", name: "Scroll", chainId: 534352, rpcUrl: "https://rpc.scroll.io" },
   { id: "custom", name: "Custom RPC", chainId: 0, rpcUrl: "" },
 ];
 
@@ -225,7 +230,7 @@ export default function ContractDeployer({ onDeploySuccess }: Props) {
               ) : (
                 <>
                   <p><span className="text-gray-400">Features:</span> Multi-L2 routing, Cross-chain messaging, Paymaster support, Batch bundling</p>
-                  <p><span className="text-gray-400">Supported Networks:</span> Arbitrum, Optimism, Base, zkSync, Linea, Scroll</p>
+                  <p><span className="text-gray-400">Supported Networks:</span> 7 EVM-compatible L2s (Arbitrum, Optimism, Base, zkSync, Linea, Scroll, Polygon)</p>
                   <p><span className="text-gray-400">Estimated Gas:</span> ~2.0M gas (~0.04 ETH at 20 Gwei)</p>
                 </>
               )}

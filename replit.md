@@ -11,7 +11,7 @@ ZeGas Smart Transfer is a gas-price-aware token transfer scheduler built with Ne
 
 ### Layer 2 Gas Optimization Module (October 22, 2025 - PRD Implementation)
 - **New Smart Contract**: `ZegasL2Optimizer.sol` with cross-layer routing capabilities
-  - Multi-L2 support (Arbitrum, Optimism, Base, zkSync, Linea, Scroll, Starknet)
+  - Multi-L2 support (7 EVM-compatible networks: Arbitrum, Optimism, Base, zkSync, Linea, Scroll, Polygon)
   - Dynamic gas price comparison across networks
   - Preferred L2 network selection with priority ordering
   - L1 fallback option when all L2s are expensive
@@ -19,10 +19,10 @@ ZeGas Smart Transfer is a gas-price-aware token transfer scheduler built with Ne
   - Paymaster support for stablecoin gas payments (EIP-4337)
   - Batch transaction bundling capability
   - Same platform fee system and relayer authorization as L1 contract
-- **Enhanced Gas Oracle**: Extended to monitor 8 networks
+- **Enhanced Gas Oracle**: Extended to monitor 8 EVM-compatible networks
   - Added: Optimism, Base, zkSync Era, Linea, Scroll
   - Existing: Ethereum, Arbitrum, Polygon
-  - Network-specific RPC endpoints and 1inch API integration
+  - Network-specific RPC endpoints and 1inch API integration (5 networks) + RPC fallback (3 networks)
 - **L2 Gas Comparator Service**: New service for intelligent routing
   - Real-time gas comparison across all L2 networks
   - Finds cheapest network based on gas prices
@@ -41,7 +41,7 @@ ZeGas Smart Transfer is a gas-price-aware token transfer scheduler built with Ne
 - **Documentation**: Comprehensive PRD-based implementation
   - Expected 95% cost reduction on L2s
   - <2s average confirmation time
-  - Support for 8 different networks
+  - Support for 8 EVM-compatible networks (Ethereum, Arbitrum, Optimism, Base, zkSync, Linea, Scroll, Polygon)
 
 ### Gas-Aware Scheduling Implementation (October 21, 2025 - PRD Implementation)
 - **New Smart Contract**: `ZegasSmartTransfer.sol` with comprehensive gas-price-aware scheduling

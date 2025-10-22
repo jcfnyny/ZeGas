@@ -12,7 +12,7 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
  * @dev Dynamically routes transactions to the cheapest L2 network based on real-time gas prices
  * 
  * Features:
- * - Multi-L2 support (Arbitrum, Optimism, Base, zkSync, Linea, etc.)
+ * - Multi-L2 support (Arbitrum, Optimism, Base, Polygon, zkSync, Linea, Scroll)
  * - Gas price comparison and intelligent routing
  * - Cross-chain messaging integration (CCIP/LayerZero/Axelar)
  * - Paymaster support for stablecoin gas payments (EIP-4337)
@@ -28,10 +28,10 @@ contract ZegasL2Optimizer is Ownable, ReentrancyGuard {
         ARBITRUM,
         OPTIMISM,
         BASE,
+        POLYGON,
         ZKSYNC,
         LINEA,
-        SCROLL,
-        STARKNET
+        SCROLL
     }
 
     // Job configuration
@@ -116,6 +116,7 @@ contract ZegasL2Optimizer is Ownable, ReentrancyGuard {
         supportedNetworks[L2Network.ARBITRUM] = true;
         supportedNetworks[L2Network.OPTIMISM] = true;
         supportedNetworks[L2Network.BASE] = true;
+        supportedNetworks[L2Network.POLYGON] = true;
         supportedNetworks[L2Network.ZKSYNC] = true;
         supportedNetworks[L2Network.LINEA] = true;
         supportedNetworks[L2Network.SCROLL] = true;
@@ -125,8 +126,10 @@ contract ZegasL2Optimizer is Ownable, ReentrancyGuard {
         l2GasThresholds[L2Network.ARBITRUM] = 1;         // 1 gwei for Arbitrum
         l2GasThresholds[L2Network.OPTIMISM] = 1;         // 1 gwei for Optimism
         l2GasThresholds[L2Network.BASE] = 1;             // 1 gwei for Base
+        l2GasThresholds[L2Network.POLYGON] = 2;          // 2 gwei for Polygon
         l2GasThresholds[L2Network.ZKSYNC] = 1;           // 1 gwei for zkSync
         l2GasThresholds[L2Network.LINEA] = 1;            // 1 gwei for Linea
+        l2GasThresholds[L2Network.SCROLL] = 1;           // 1 gwei for Scroll
     }
 
     /**
