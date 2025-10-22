@@ -20,6 +20,8 @@ export type { IERC165 } from "./@openzeppelin/contracts/utils/introspection/IERC
 export { IERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/IERC165__factory";
 export type { ReentrancyGuard } from "./@openzeppelin/contracts/utils/ReentrancyGuard";
 export { ReentrancyGuard__factory } from "./factories/@openzeppelin/contracts/utils/ReentrancyGuard__factory";
+export type { ZegasL2Optimizer } from "./contracts/ZegasL2Optimizer";
+export { ZegasL2Optimizer__factory } from "./factories/contracts/ZegasL2Optimizer__factory";
 export type { ZegasScheduler } from "./contracts/ZegasScheduler";
 export { ZegasScheduler__factory } from "./factories/contracts/ZegasScheduler__factory";
 export type { ZegasSmartTransfer } from "./contracts/ZegasSmartTransfer";

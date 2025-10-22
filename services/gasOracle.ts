@@ -9,7 +9,27 @@ export interface GasPrices {
   totalFeeGwei: number;
   timestamp: number;
   source: '1inch' | 'chainlink' | 'rpc';
+  network?: string;
 }
+
+export interface L2NetworkInfo {
+  chainId: number;
+  name: string;
+  type: 'optimistic' | 'zk' | 'l1';
+  rpcUrl: string;
+  supported1inch: boolean;
+}
+
+export const L2_NETWORKS: { [key: string]: L2NetworkInfo } = {
+  ethereum: { chainId: 1, name: 'Ethereum', type: 'l1', rpcUrl: 'https://eth.llamarpc.com', supported1inch: true },
+  arbitrum: { chainId: 42161, name: 'Arbitrum', type: 'optimistic', rpcUrl: 'https://arb1.arbitrum.io/rpc', supported1inch: true },
+  optimism: { chainId: 10, name: 'Optimism', type: 'optimistic', rpcUrl: 'https://mainnet.optimism.io', supported1inch: true },
+  base: { chainId: 8453, name: 'Base', type: 'optimistic', rpcUrl: 'https://mainnet.base.org', supported1inch: true },
+  polygon: { chainId: 137, name: 'Polygon', type: 'l1', rpcUrl: 'https://polygon-rpc.com', supported1inch: true },
+  zksync: { chainId: 324, name: 'zkSync Era', type: 'zk', rpcUrl: 'https://mainnet.era.zksync.io', supported1inch: false },
+  linea: { chainId: 59144, name: 'Linea', type: 'zk', rpcUrl: 'https://rpc.linea.build', supported1inch: false },
+  scroll: { chainId: 534352, name: 'Scroll', type: 'zk', rpcUrl: 'https://rpc.scroll.io', supported1inch: false },
+};
 
 export class GasOracleService {
   private chainId: number;
@@ -21,6 +41,18 @@ export class GasOracleService {
   }
 
   /**
+   * Get network name from chain ID
+   */
+  private getNetworkName(): string {
+    for (const [name, info] of Object.entries(L2_NETWORKS)) {
+      if (info.chainId === this.chainId) {
+        return info.name;
+      }
+    }
+    return `Chain ${this.chainId}`;
+  }
+
+  /**
    * Get current gas prices from 1inch oracle
    */
   async getGasPricesFrom1inch(): Promise<GasPrices | null> {
@@ -29,6 +61,8 @@ export class GasOracleService {
         1: '1',       // Ethereum
         137: '137',   // Polygon
         42161: '42161', // Arbitrum
+        10: '10',     // Optimism
+        8453: '8453', // Base
       };
 
       const chainParam = chainIdMap[this.chainId];
@@ -57,6 +91,7 @@ export class GasOracleService {
         totalFeeGwei: baseFeeGwei + priorityFeeGwei,
         timestamp: Date.now(),
         source: '1inch',
+        network: this.getNetworkName(),
       };
     } catch (error) {
       console.error('Error fetching from 1inch:', error);
@@ -97,6 +132,7 @@ export class GasOracleService {
       totalFeeGwei: baseFeeGwei + priorityFeeGwei,
       timestamp: Date.now(),
       source: 'rpc',
+      network: this.getNetworkName(),
     };
   }
 

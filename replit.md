@@ -3,9 +3,45 @@
 ## Overview
 ZeGas Smart Transfer is a gas-price-aware token transfer scheduler built with Next.js and Ethereum smart contracts. It monitors real-time gas prices (via 1inch or Chainlink oracles) and automatically executes transfers only when gas fees meet user-defined thresholds, optimizing cost, timing, and reliability.
 
-**Current State**: Major redesign to implement PRD requirements for gas-aware scheduling with time windows, permit support (EIP-2612), and automated relayer execution.
+**Current State**: Expanded with Layer 2 Gas Optimization Module, giving users two contract deployment options:
+1. **ZegasSmartTransfer** (L1-focused) - Gas-aware scheduling with time windows and EIP-2612 permit support
+2. **ZegasL2Optimizer** (NEW) - Cross-layer execution optimizer that routes to the cheapest L2 network
 
 ## Recent Changes
+
+### Layer 2 Gas Optimization Module (October 22, 2025 - PRD Implementation)
+- **New Smart Contract**: `ZegasL2Optimizer.sol` with cross-layer routing capabilities
+  - Multi-L2 support (Arbitrum, Optimism, Base, zkSync, Linea, Scroll, Starknet)
+  - Dynamic gas price comparison across networks
+  - Preferred L2 network selection with priority ordering
+  - L1 fallback option when all L2s are expensive
+  - Cross-chain messaging integration ready (CCIP/LayerZero/Axelar placeholders)
+  - Paymaster support for stablecoin gas payments (EIP-4337)
+  - Batch transaction bundling capability
+  - Same platform fee system and relayer authorization as L1 contract
+- **Enhanced Gas Oracle**: Extended to monitor 8 networks
+  - Added: Optimism, Base, zkSync Era, Linea, Scroll
+  - Existing: Ethereum, Arbitrum, Polygon
+  - Network-specific RPC endpoints and 1inch API integration
+- **L2 Gas Comparator Service**: New service for intelligent routing
+  - Real-time gas comparison across all L2 networks
+  - Finds cheapest network based on gas prices
+  - Threshold-based network selection
+  - Cost estimation in USD
+  - Execution cost comparison across networks
+- **Contract Type Selector UI**: Users can now choose between two deployment options
+  - Visual comparison cards showing features of each contract type
+  - L1-focused (ZegasSmartTransfer) vs L2-optimized (ZegasL2Optimizer)
+  - Dynamic contract information panel based on selection
+  - NEW badge on L2 optimizer option
+- **Updated Deployment Scripts**: 
+  - `deploy-l2-optimizer.ts` for L2 optimizer deployment
+  - Deployment API handles both contract types automatically
+  - Constructor parameter handling for each contract type
+- **Documentation**: Comprehensive PRD-based implementation
+  - Expected 95% cost reduction on L2s
+  - <2s average confirmation time
+  - Support for 8 different networks
 
 ### Gas-Aware Scheduling Implementation (October 21, 2025 - PRD Implementation)
 - **New Smart Contract**: `ZegasSmartTransfer.sol` with comprehensive gas-price-aware scheduling
@@ -105,12 +141,14 @@ ZeGas Smart Transfer is a gas-price-aware token transfer scheduler built with Ne
 This is a monorepo containing:
 
 - **/contracts**: Solidity smart contracts
-  - `ZegasSmartTransfer.sol`: **PRIMARY** - Gas-aware transfer scheduler with time windows and permit support
+  - `ZegasSmartTransfer.sol`: **PRIMARY (L1)** - Gas-aware transfer scheduler with time windows and permit support
+  - `ZegasL2Optimizer.sol`: **PRIMARY (L2)** - Cross-layer gas optimizer with multi-L2 routing
   - `ZegasScheduler.sol`: Legacy scheduler contract
   - `ZegasTokenTransfer.sol`: Legacy token transfer scheduler
   
 - **/services**: Backend services
-  - `gasOracle.ts`: Gas price monitoring service (1inch + RPC fallback)
+  - `gasOracle.ts`: Gas price monitoring service (1inch + RPC fallback) - supports 8 networks
+  - `l2GasComparator.ts`: L2 network gas comparison and routing service
   - `relayer.ts`: Automated job execution engine
   
 - **/frontend**: Next.js application (pages directory)
@@ -126,7 +164,8 @@ This is a monorepo containing:
   - `styles/`: Global CSS and Tailwind configuration
   
 - **/scripts**: Deployment and utility scripts
-  - `deploy-smart-transfer.ts`: **PRIMARY** - Deploy ZegasSmartTransfer contract
+  - `deploy-smart-transfer.ts`: **PRIMARY (L1)** - Deploy ZegasSmartTransfer contract
+  - `deploy-l2-optimizer.ts`: **PRIMARY (L2)** - Deploy ZegasL2Optimizer contract
   - `deploy.ts`: Legacy ZegasScheduler deployment
   - `deploy-transfer.ts`: Legacy ZegasTokenTransfer deployment
   - `fund-relayer.ts`: Script to fund the relayer wallet

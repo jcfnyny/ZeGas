@@ -42,6 +42,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ReentrancyGuard__factory>;
     getContractFactory(
+      name: "ZegasL2Optimizer",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ZegasL2Optimizer__factory>;
+    getContractFactory(
       name: "ZegasScheduler",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ZegasScheduler__factory>;
@@ -90,6 +94,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.ReentrancyGuard>;
     getContractAt(
+      name: "ZegasL2Optimizer",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ZegasL2Optimizer>;
+    getContractAt(
       name: "ZegasScheduler",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -134,6 +143,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.ReentrancyGuard>;
     deployContract(
+      name: "ZegasL2Optimizer",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.ZegasL2Optimizer>;
+    deployContract(
       name: "ZegasScheduler",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.ZegasScheduler>;
@@ -181,6 +194,11 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.ReentrancyGuard>;
+    deployContract(
+      name: "ZegasL2Optimizer",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.ZegasL2Optimizer>;
     deployContract(
       name: "ZegasScheduler",
       args: any[],
