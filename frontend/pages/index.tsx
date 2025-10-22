@@ -4,7 +4,7 @@ import { ethers } from "ethers";
 
 const WalletConnect = dynamic(() => import("../components/WalletConnect"), { ssr: false });
 const NetworkSelector = dynamic(() => import("../components/NetworkSelector"), { ssr: false });
-const ContractSelector = dynamic(() => import("../components/ContractSelector"), { ssr: false });
+const InlineDeployment = dynamic(() => import("../components/InlineDeployment"), { ssr: false });
 const TransferForm = dynamic(() => import("../components/TransferForm"), { ssr: false });
 const GasPriceMonitor = dynamic(() => import("../components/GasPriceMonitor"), { ssr: false });
 
@@ -117,18 +117,19 @@ export default function Home() {
             </div>
           </div>
         ) : !contractAddr ? (
-          <div className="max-w-2xl mx-auto">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-white mb-3">Select Contract</h2>
-              <p className="text-gray-400">Choose or deploy your transfer scheduler contract</p>
-            </div>
-            <ContractSelector onAddressSelected={setContractAddr} />
-          </div>
+          <InlineDeployment onAddressSelected={setContractAddr} />
         ) : (
           <div className="max-w-4xl mx-auto space-y-6">
             <div className="text-center mb-8">
               <h2 className="text-3xl font-bold text-white mb-2">Gas-Aware Token Transfers</h2>
               <p className="text-gray-400">Schedule transfers to execute when gas prices meet your thresholds</p>
+              
+              <button
+                onClick={() => setContractAddr("")}
+                className="mt-4 text-sm text-kraken-accent hover:text-kraken-purple transition-colors"
+              >
+                Change Contract
+              </button>
             </div>
             
             <GasPriceMonitor chainId={currentChainId} />
