@@ -9,6 +9,16 @@ ZeGas Smart Transfer is a gas-price-aware token transfer scheduler built with Ne
 
 ## Recent Changes
 
+### Inline Deployment UI (October 22, 2025)
+- **Homepage Redesign**: Removed modal popup, replaced with 3 inline deployment options
+  - **Existing Contract**: Enter pre-deployed contract address
+  - **ZeGas Smart Transfer**: Deploy L1-focused gas-aware scheduler
+  - **ZeGas L2 Optimizer**: Deploy multi-L2 routing optimizer
+- **Expandable Sections**: Click to expand/collapse each option with smooth animations
+- **Visual Selection States**: Clear indicators for selected option with purple borders and shadows
+- **All Functionality Preserved**: Complete deployment workflow with all parameters (gas thresholds, platform fees, relayers, verification)
+- **Improved UX**: Better information hierarchy, NEW badge on L2 optimizer, clear feature descriptions
+
 ### Layer 2 Gas Optimization Module (October 22, 2025 - PRD Implementation)
 - **New Smart Contract**: `ZegasL2Optimizer.sol` with cross-layer routing capabilities
   - Multi-L2 support (7 EVM-compatible networks: Arbitrum, Optimism, Base, zkSync, Linea, Scroll, Polygon)
